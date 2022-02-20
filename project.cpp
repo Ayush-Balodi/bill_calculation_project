@@ -175,6 +175,136 @@ void Bill::show ( int num ){
 	fin.close();
 	return;
 }
+ 
+void Bill::edit(){
+
+    int itemno , num , index;
+    char choice;
+ss:
+	system("cls");
+	CYN
+	cout << "///////////////////////////////EDIT DETAILS/////////////////////////////////" << endl << endl;
+    
+	GRN
+    cout << "*  Enter the item number => ";
+    cin >> itemno;
+
+    if( check( itemno ) == 0 ){
+		RED
+        cout << "*  Item number not existed.Redirecting........." << endl;
+		cout << "*  Press any key to continue => ";
+		getch();
+        goto ss;
+    }
+
+	RED
+	cout << "*  I=>Item number ; N=>Name ; P=>Price ; Q=>Quantity ; T=>Tax ; D=>Discount" << endl;
+    GRN
+	cout << "*  Enter particular what you want to update(I/N/P/Q/T/D) => ";
+    cin >> choice;
+
+    if (choice == 'I' || choice == 'i')
+        index = 0;
+    else if (choice == 'N' || choice == 'n')
+        index = 1;
+    else if (choice == 'P' || choice == 'p')
+        index = 2;
+    else if (choice == 'Q' || choice == 'q')
+        index = 3;
+    else if (choice == 'T' || choice == 't')
+        index = 4;
+    else if( choice == 'D' || choice == 'd')
+        index = 5;
+    else {
+		RED
+        cout << "*  Wrong choice.Enter again\n";
+		cout << "*  Redirecting ........" <<endl;
+		cout << "*  Press any key to continue => ";
+		getch();
+        goto ss;
+    }
+
+	cout << "********************CURRENT DETAILS*********************************" << endl << endl;
+	show( itemno );
+    string str;
+	cout << endl;
+	GRN
+	cout << "**********************NEW DETAILS***********************************" << endl;
+    cout << "*  Enter new details => ";
+
+    fflush(stdin);
+    
+    getline( cin , str );
+
+    if( choice == 'I' || choice == 'i' ){
+
+        if( check( stoi(str) ) == 1 ){
+			RED
+            cout << "*  Item number already existed.Redirecting........." << endl;
+			cout << "*  Press any key to continue => ";
+            goto ss;
+        }
+    }
+
+    fstream fin("report.csv",ios::in);
+    fstream fout("reportcard.csv",ios::out);
+
+    if( fin.fail() || fout.fail() ){
+		RED
+        cout << "*  Error occured while opening the file." << endl;
+        return;
+    }
+	
+    string line , word;
+    vector<string> row;
+    int c2=0;
+
+    while( getline ( fin , line ) ){
+        
+        row.clear();
+        stringstream ss( line );
+
+        while( getline( ss , word , ',' ) ){
+            row.push_back( word );
+        }
+
+        num = stoi( row[0] );
+        int row_size = row.size();
+
+        if( num == itemno ){
+            c2 = 1;
+            row[index] = str;
+
+            if (!fin.eof()) {
+                
+                for ( int i = 0; i < row_size-1 ; i++) {
+  
+                    fout << row[i] << ',';
+                }
+                fout << row[row_size - 1] << "\n";
+            }
+        }
+        else{
+            if (!fin.eof() ){
+                for ( int i = 0; i < row_size-1 ; i++) {
+                    fout << row[i] << ',';
+                }
+                fout << row[row_size - 1] << "\n";
+            }
+        }
+    }
+    if( c2 == 0 ){
+		RED
+        cout << "*  Record not found." << endl;
+    }
+    fin.close();
+    fout.close();
+
+    remove("report.csv");
+    rename("reportcard.csv","report.csv");
+
+    return;
+}
 
 int main () {
 
