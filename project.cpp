@@ -306,6 +306,70 @@ ss:
     return;
 }
 
+void Bill::del(){
+
+back:
+	system("cls");
+	GRN
+    int itemno;
+    cout << "*  Enter the item number => ";
+    cin >> itemno;
+
+    if( check( itemno ) == 0 ){
+		RED
+        cout << "*  Item number not existed.Redirecting........." << endl;
+		cout << "*  Press any key to continue => ";
+        goto back;
+    }
+
+    fstream fin("report.csv",ios::in);
+    fstream fout("ayushnew.csv",ios::out);
+    if( fin.fail() || fout.fail() ){
+		RED
+        cout << "*  Error occured while opening the file." << endl;
+        return;
+    }
+    
+	string line , word;
+    vector<string> row;
+    
+	while( getline( fin , line) ){
+
+        row.clear();
+        stringstream ss(line);
+
+        while( getline( ss , word , ',' ) ){
+            row.push_back( word );
+        }
+        int num = stoi(row[0]);
+        int row_size = row.size();
+
+        if( num == itemno ){
+            continue;
+        }
+        else{
+            if( !fin.eof() ){
+                for( int i=0 ; i<row_size-1 ; i++ ){
+                    fout << row[i] << ',';
+                }
+                fout << row[row_size-1] << "\n";
+            }
+        }
+    }
+
+    fin.close();
+    fout.close();
+
+    remove("report.csv");
+    rename("ayushnew.csv","report.csv");
+
+	PUR
+    cout << "*  Item Deleted succesfully." << endl;
+    cout << "*  Press any key to continue => ";
+    getch();
+    return;
+}
+
 int main () {
 
 	int choice;					//choice -> for maintaining user choice
