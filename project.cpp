@@ -86,6 +86,45 @@ void Bill::report(){
 	return;
 }
 
+void Bill::add (){
+	
+	fstream fin("report.csv",ios::app);
+	if( fin.fail() ){
+		RED
+		cout << "*  Error occured while opening the file." << endl;
+		return;
+	}
+
+	GRN
+	cout << "*  Item number => ";
+	cin >> item_number;
+	
+	cout << "*upto 11 characters only*" << endl;
+	fflush( stdin );
+	cout << "*  Name        => ";
+	getline(cin , name);
+
+	cout << "*  Quantity    => ";
+	cin >> quantity;
+
+	cout << "*  Tax         => ";
+	cin >> tax;
+
+	cout << "*  Discount    => ";
+	cin >> discount;
+
+	cout << "*  Mrp         => ";
+	cin >> price;
+    
+	float net_amount = calculate(price , quantity , tax , discount);
+    
+	fin << item_number << "," << name << "," << price << "," << quantity << "," << tax << "," << discount << "," ;
+	fin << net_amount << "\n";
+	
+	fin.close();
+    return;
+}
+
 int main () {
 
 	int choice;					//choice -> for maintaining user choice
