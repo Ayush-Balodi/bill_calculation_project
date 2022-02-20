@@ -33,53 +33,57 @@ class Bill{
 		float calculate( float , int , float , float );
 };
 
-/*Generates the bill report all the products in the inventory*/
-void Bill::report (){
-    system("cls");
-    fstream fin("report.csv",ios::in);
+/*Generates the report of all the products in the inventory*/
+void Bill::report(){
+	
+	system("cls");
 
-    if( fin.eof() ){
-        cout << "Unable to access tyhe file." << endl;
-        return;
-    }
-    string line , word;
-    vector<string> row;
+	fstream fin("report.csv",ios::in);
+	if( fin.fail() ){
+		RED
+		cout << "*  Error occured while opening the file." << endl;
+		return;
+	}
+	
+	string line , word;
+	vector<string> row;
+	float net_amount = 0;
+	int count=0;
 
-    int count=0;
-    while( getline( fin , line ) ){
-        row.clear();
+	CYN
+	cout << "////////////////////////////////////BILL DETAILS///////////////////////////////////\n" << endl << endl;
 
-        /*stringstream changes the input stream to string stream and
-          now getline can be overloaded to apply delimiters*/
+	GRN
+	cout << "Item no Name            Price   Quantity        Tax     Discount        Net Amount" << endl;
+	while( getline( fin , line ) ){
+		
+		row.clear();
+		stringstream ss(line);
+		
+		while( getline ( ss , word , ',' ) ){
+			row.push_back(word);
+		}
 
-        stringstream ss( line );
-        while( getline ( ss , word , ',' ) ){
-            row.push_back( word );
-        }
-
-        if( count == 0 ){
-            /*isplay the heading of the report.csv file*/
-            for(int i=0 ; i<7 ; i++){
-                cout << row[i] << "\t";
-            }
-            cout << endl;
-        }
-        else{
-            /*isplay the content of the report.csv file*/
-            for(int i=0 ; i<7 ; i++){
-                if( i==3 || i==5 ){
-                    cout << row[i] << "\t\t";
-                }
-                else{
-                    cout << row[i] << "\t";
-                }
-            }
-            cout << endl;
-        }
-        count ++;
-    }
-    fin.close();
-    return;
+		/*Display the content of the report.csv file*/
+		for( int i=0 ; i<7 ; i++ ){
+			if( i == 3 || i == 5 ){
+				cout << row[i] << "\t\t";
+			}
+			else{
+				cout << row[i] << "\t";
+			}
+			if( i==6 ){
+				net_amount = net_amount + (float)stof(row[i]);
+			}
+		}
+		cout << endl;
+		count ++;
+	}
+	
+	cout << "\n\n\t\t\tTotal inventory : " << net_amount << endl;
+	
+	fin.close();
+	return;
 }
 
 int main () {
