@@ -9,6 +9,14 @@
 
 using namespace std;
 
+HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE);
+
+#define BLUE SetConsoleTextAttribute( h , 1 );//Blue
+#define PUR SetConsoleTextAttribute( h , 5 );//Purple
+#define GRN SetConsoleTextAttribute( h , 10 );//Bright green
+#define CYN SetConsoleTextAttribute( h , 3 );//Cyan
+#define RED SetConsoleTextAttribute( h , 4 );//Red
+
 class Bill{
     private:
         string name;
