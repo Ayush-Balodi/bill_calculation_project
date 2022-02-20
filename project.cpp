@@ -18,14 +18,19 @@ HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE);
 #define RED SetConsoleTextAttribute( h , 4 );//Red
 
 class Bill{
-    
+
     string name;
 	int item_number , quantity;
 	float tax , discount , price;
     
     public:
-        void report ();
-        void entry ();
+        void report();
+		void add();
+		void show( int );
+		void edit ();
+		void del ();
+		int check( int );
+		float calculate( float , int , float , float );
 };
 
 /*Generates the bill report all the products in the inventory*/
