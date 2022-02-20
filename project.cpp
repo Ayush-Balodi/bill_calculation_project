@@ -125,6 +125,57 @@ void Bill::add (){
     return;
 }
 
+void Bill::show ( int num ){
+	
+	fstream fin("report.csv",ios::in);
+	if( fin.fail() ){
+		RED
+		cout << "*  Error occured while opening the file." << endl;
+		fin.close();
+		return;
+	}
+	
+	string line , word;
+	vector<string> row;
+	int itemno;
+
+	while( getline( fin , line ) ){
+
+		row.clear();
+		stringstream ss(line);
+		
+		while( getline ( ss , word , ',' ) ){
+			
+			row.push_back(word);
+		}
+		itemno = stoi(row[0]);
+
+		BLUE	
+		if( num == itemno ){
+
+			cout << endl;
+			cout << "*  Item Number      => " << row[0] << endl << endl;
+			cout << "*  Name of item     => " << row[1] << endl << endl;
+			cout << "*  Inventory Cost   => " << row[6] << endl << endl << endl;
+			cout << "\t*********************************************" << endl;
+			cout << "\t\t\tDETAILS" << endl;
+			cout << "\t*********************************************" << endl << endl;
+			cout << "\tPRICE                       => " << row[2] << endl;
+			cout << "\tQUANTITY                    => " << row[3] << endl;
+			cout << "\tTAX PERCENTAGE              => " << row[4] << endl;
+			cout << "\tDISCOUNT PERCENTAGE         => " << row[5] << endl;
+			cout << "\tINVENTORY COST              => " << row[6] << endl << endl;
+			cout << "\t*********************************************" << endl;
+			fin.close();
+			return;
+		}
+	}
+	cout << "*  No such item is present in inventory." << endl;
+	
+	fin.close();
+	return;
+}
+
 int main () {
 
 	int choice;					//choice -> for maintaining user choice
