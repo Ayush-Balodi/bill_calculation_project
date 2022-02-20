@@ -18,10 +18,10 @@ HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE);
 #define RED SetConsoleTextAttribute( h , 4 );//Red
 
 class Bill{
-    private:
-        string name;
-        int item_number , quantity;
-        float price , tax , discount , mrp;
+    
+    string name;
+	int item_number , quantity;
+	float tax , discount , price;
     
     public:
         void report ();
