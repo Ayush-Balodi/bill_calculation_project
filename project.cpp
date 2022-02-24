@@ -126,6 +126,11 @@ void Bill::report(){
 }
 
 void Bill::add (){
+
+wapas:
+	system("cls");
+	CYN
+	cout << "//////////////////////ADD DETAILS///////////////////////////" << endl << endl;
 	
 	fstream fin("report.csv",ios::app);
 	if( fin.fail() ){
@@ -137,6 +142,14 @@ void Bill::add (){
 	GRN
 	cout << "*  Item number => ";
 	cin >> item_number;
+	
+	if( check( item_number ) == 1 ){
+		RED
+		cout << "*  Item number already existed.Redirecting........." << endl;
+		cout << "*  Press any key to continue => ";
+		getch();
+		goto wapas;
+	}
 	
 	cout << "*upto 11 characters only*" << endl;
 	fflush( stdin );
