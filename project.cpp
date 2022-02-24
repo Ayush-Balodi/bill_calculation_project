@@ -1,15 +1,16 @@
 #include<iostream>
 #include<fstream>
-#include<vector>
 #include<sstream>
+#include<vector>
+#include<windows.h>
 #include<conio.h>
 #include<cstdlib>
-#include<windows.h>
 #include<string>
+#include<iomanip>
 
-using namespace std;
+using namespace std ;
 
-HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE);
+HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE );
 
 #define BLUE SetConsoleTextAttribute( h , 1 );//Blue
 #define PUR SetConsoleTextAttribute( h , 5 );//Purple
@@ -18,13 +19,13 @@ HANDLE h = GetStdHandle( STD_OUTPUT_HANDLE);
 #define RED SetConsoleTextAttribute( h , 4 );//Red
 
 class Bill{
-
-    string name;
+    
+	string name;
 	int item_number , quantity;
 	float tax , discount , price;
-    
-    public:
-        void report();
+	
+	public:
+		void report();
 		void add();
 		void show( int );
 		void edit ();
@@ -118,8 +119,8 @@ void Bill::report(){
 		cout << endl;
 		count ++;
 	}
-	
-	cout << "\n\n\t\t\tTotal inventory : " << net_amount << endl;
+	cout.setf(ios::fixed);
+	cout << setprecision(4) << "\n\n\t\t\tTotal inventory : " << net_amount << endl;
 	
 	fin.close();
 	return;
@@ -139,18 +140,19 @@ wapas:
 		return;
 	}
 
-	GRN
+	BLUE
 	cout << "*  Item number => ";
 	cin >> item_number;
-	
-	if( check( item_number ) == 1 ){
+
+	if( check( item_number ) == 1 )
+	{
 		RED
-		cout << "*  Item number already existed.Redirecting........." << endl;
+        cout << "*  Item number already existed.Redirecting........." << endl;
 		cout << "*  Press any key to continue => ";
 		getch();
 		goto wapas;
 	}
-	
+	GRN
 	cout << "*upto 11 characters only*" << endl;
 	fflush( stdin );
 	cout << "*  Name        => ";
@@ -190,7 +192,7 @@ void Bill::show ( int num ){
 	string line , word;
 	vector<string> row;
 	int itemno;
-
+	
 	while( getline( fin , line ) ){
 
 		row.clear();
@@ -202,7 +204,7 @@ void Bill::show ( int num ){
 		}
 		itemno = stoi(row[0]);
 
-		BLUE	
+		GRN	
 		if( num == itemno ){
 
 			cout << endl;
@@ -227,7 +229,7 @@ void Bill::show ( int num ){
 	fin.close();
 	return;
 }
- 
+
 void Bill::edit(){
 
     int itemno , num , index;
@@ -237,7 +239,7 @@ ss:
 	CYN
 	cout << "///////////////////////////////EDIT DETAILS/////////////////////////////////" << endl << endl;
     
-	GRN
+	BLUE
     cout << "*  Enter the item number => ";
     cin >> itemno;
 
@@ -248,7 +250,8 @@ ss:
 		getch();
         goto ss;
     }
-
+	
+	cout << endl;
 	RED
 	cout << "*  I=>Item number ; N=>Name ; P=>Price ; Q=>Quantity ; T=>Tax ; D=>Discount" << endl;
     GRN
@@ -282,7 +285,9 @@ ss:
 	cout << endl;
 	GRN
 	cout << "**********************NEW DETAILS***********************************" << endl;
-    cout << "*  Enter new details => ";
+    
+	BLUE
+	cout << "*  Enter new details => ";
 
     fflush(stdin);
     
@@ -294,6 +299,7 @@ ss:
 			RED
             cout << "*  Item number already existed.Redirecting........." << endl;
 			cout << "*  Press any key to continue => ";
+			getch();
             goto ss;
         }
     }
@@ -326,7 +332,10 @@ ss:
         if( num == itemno ){
             c2 = 1;
             row[index] = str;
-
+			float net_amount = calculate ( stof(row[2]) , stoi(row[3]) , stof(row[4]) , stof(row[5]) );
+			
+			row[6] = to_string( net_amount );
+			
             if (!fin.eof()) {
                 
                 for ( int i = 0; i < row_size-1 ; i++) {
@@ -362,7 +371,10 @@ void Bill::del(){
 
 back:
 	system("cls");
-	GRN
+	CYN
+	cout << "//////////////////////////////DELETE DETAILS/////////////////////////////////\n" <<endl << endl;
+	
+	BLUE
     int itemno;
     cout << "*  Enter the item number => ";
     cin >> itemno;
@@ -371,10 +383,11 @@ back:
 		RED
         cout << "*  Item number not existed.Redirecting........." << endl;
 		cout << "*  Press any key to continue => ";
+		getch();
         goto back;
     }
-
-    fstream fin("report.csv",ios::in);
+	
+	fstream fin("report.csv",ios::in);
     fstream fout("ayushnew.csv",ios::out);
     if( fin.fail() || fout.fail() ){
 		RED
@@ -450,14 +463,14 @@ menu:
 			int choice;
 			system("cls");
 			CYN
-			cout << "//////////////////////ADD DETAILS///////////////////////////" << endl << endl;
-
+			cout << "//////////////////////BILL REPORT///////////////////////////" << endl << endl;
 			GRN
 			cout << "*************************" << endl;
 			cout << "*  1.>All items         *" << endl;
 			cout << "*  2.>Back to main menu *" << endl;
 			cout << "*************************" << endl << endl;
 
+			BLUE
 			cout << "*  Enter your choice => ";
 			cin >> choice;
 
@@ -596,6 +609,12 @@ menu:
 			cin >> ch;
 
 			if( ch == 1 ){
+
+				system("cls");
+				CYN
+				cout << "///////////////////////////////SHOW DETAILS//////////////////////////////////" << endl << endl;
+
+				BLUE
 				int itemno;
 				cout << "*  Enter the item number => ";
 				cin >> itemno;
