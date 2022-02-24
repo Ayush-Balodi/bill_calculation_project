@@ -33,6 +33,15 @@ class Bill{
 		float calculate( float , int , float , float );
 };
 
+float Bill::calculate ( float price , int quantity , float tax , float discount){
+	
+	float amount;
+	amount = (price * quantity);
+	amount = amount + ((amount * tax) / 100);
+	amount = amount - ((amount * discount) / 100);
+	return amount;
+}
+
 int Bill::check( int itemno ){
 
 	fstream fin("report.csv",ios::in);
@@ -61,15 +70,6 @@ int Bill::check( int itemno ){
         }
     }
 	return 0;
-}
-
-float Bill::calculate ( float price , int quantity , float tax , float discount){
-	
-	float amount;
-	amount = (price * quantity);
-	amount = amount + ((amount * tax) / 100);
-	amount = amount - ((amount * discount) / 100);
-	return amount;
 }
 
 /*Generates the report of all the products in the inventory*/
